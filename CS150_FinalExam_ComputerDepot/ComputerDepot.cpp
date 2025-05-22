@@ -223,7 +223,6 @@ int main(int argc, char *argv[])
 			}
 			cout << "*****************************************************************************************\n";
 			pauseExecution();
-			// clearScreen(); // REMOVED
 			break;
 		}
 		case 3:
