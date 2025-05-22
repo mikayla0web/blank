@@ -22,8 +22,13 @@
  * 7. Declare overloaded stream insertion operator as a friend function.
  *****************************************************************************
  * ALL IMPORTED LIBRARIES NEEDED AND PURPOSE:
- * <string> - For using the string data type.
- * <iostream> - For ostream (used in friend operator<< declaration).
+ * <iostream>   - For input/output
+ * <cstdlib>    - For EXIT_SUCCESS and system().
+ * <string>     - For using the string data type.
+ * <iomanip>    - For output formatting (setw, setprecision, fixed, left, right).
+ * <limits>     - For std::numeric_limits (used to clear input buffer).
+ * "Computer.h" - Definition of the Computer class.
+ * "Laptop.h"   - Definition of the Laptop class.
  *****************************************************************************/
 
 #include <iostream>
@@ -39,7 +44,24 @@ using namespace std;
 
 const int MAX_ITEMS = 50;
 
-void displayMenu() {
+void clearScreen()
+{
+#ifdef _WIN32 // Check if the system is Windows
+	system("CLS");
+#else
+	system("clear");
+#endif
+}
+
+// Function to pause execution (cross-platform alternative to system("PAUSE"))
+void pauseExecution()
+{
+	cout << "Press Enter to continue...";
+	cin.get(); // Waits for the user to press Enter
+}
+
+void displayMenu()
+{
 	cout
 		<< "*************************************************************************\n"
 		<< "**                 Welcome to the Computer Depot                       **\n"
@@ -56,7 +78,7 @@ void clearInputBuffer()
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-int main(int /*argc*/, char*[] /*argv*/)
+int main(int argc, char *argv[])
 {
 	Computer computers[MAX_ITEMS];
 	Laptop laptops[MAX_ITEMS];
@@ -81,7 +103,7 @@ int main(int /*argc*/, char*[] /*argv*/)
 		}
 		clearInputBuffer(); // Clear newline after reading choice
 
-		system("CLS"); // Or system("clear")
+		clearScreen();
 
 		switch (choice)
 		{
@@ -96,8 +118,8 @@ int main(int /*argc*/, char*[] /*argv*/)
 				cout << "** Invalid item type. Returning to main menu. **\n";
 				cin.clear();
 				clearInputBuffer();
-				system("PAUSE");
-				system("CLS");
+				pauseExecution();
+				clearScreen();
 				break;
 			}
 			clearInputBuffer(); // Clear newline
@@ -106,9 +128,9 @@ int main(int /*argc*/, char*[] /*argv*/)
 			double price;
 
 			cout << "Enter make               >> ";
-			getline(cin, make); // Use getline for make to allow spaces
+			getline(cin, make);
 			cout << "Enter model              >> ";
-			getline(cin, model); // Use getline for model to allow spaces
+			getline(cin, model);
 			cout << "Enter price              >> $";
 			cin >> price;
 			if (cin.fail())
@@ -116,8 +138,8 @@ int main(int /*argc*/, char*[] /*argv*/)
 				cout << "** Invalid price input. Returning to main menu. **\n";
 				cin.clear();
 				clearInputBuffer();
-				system("PAUSE");
-				system("CLS");
+				pauseExecution();
+				clearScreen();
 				break;
 			}
 			clearInputBuffer();
@@ -144,8 +166,8 @@ int main(int /*argc*/, char*[] /*argv*/)
 					cout << "** Invalid battery life input. Returning to main menu. **\n";
 					cin.clear();
 					clearInputBuffer();
-					system("PAUSE");
-					system("CLS");
+					pauseExecution();
+					clearScreen();
 					break;
 				}
 				clearInputBuffer();
@@ -157,8 +179,8 @@ int main(int /*argc*/, char*[] /*argv*/)
 					cout << "** Invalid weight input. Returning to main menu. **\n";
 					cin.clear();
 					clearInputBuffer();
-					system("PAUSE");
-					system("CLS");
+					pauseExecution();
+					clearScreen();
 					break;
 				}
 				clearInputBuffer();
@@ -173,19 +195,20 @@ int main(int /*argc*/, char*[] /*argv*/)
 					cout << "** Laptop inventory is full. **\n";
 				}
 			}
-
+			pauseExecution();
+			clearScreen();
 			break;
 		}
 		case 2:
 		{ // Display inventory
 			cout
-				<< "*************************************************************************\n"
-				<< "**                          Entire Inventory                           **\n"
-				<< "*************************************************************************\n"
-				<< "| Id # | Make       | Model    | Price  | Battery (hrs) | Weight (lbs)  |\n"
-				<< "*************************************************************************\n";
+				<< "*****************************************************************************************\n"
+				<< "** Entire Inventory                                   **\n"
+				<< "*****************************************************************************************\n"
+				<< "| Id # | Make    | Model           | Price    | Battery (hrs)   | Weight (lbs)    |\n"
+				<< "*****************************************************************************************\n";
 
-			cout << fixed << setprecision(2); // General precision for prices
+			cout << fixed << setprecision(2);
 
 			for (int i = 0; i < numComputers; ++i)
 			{
@@ -199,10 +222,9 @@ int main(int /*argc*/, char*[] /*argv*/)
 			{
 				cout << "|                        No items in inventory currently.                         |\n";
 			}
-			cout
-				<< "*************************************************************************\n";
-			system("PAUSE");
-			system("CLS");
+			cout << "*****************************************************************************************\n";
+			pauseExecution();
+			clearScreen();
 			break;
 		}
 		case 3:
@@ -212,14 +234,11 @@ int main(int /*argc*/, char*[] /*argv*/)
 			break;
 		}
 		default:
-			// Backup to the backup if input validation above is not working
 			cout << "** Should not happen. Invalid choice: " << choice << " **\n";
-			system("PAUSE");
-			system("CLS");
+			pauseExecution();
+			clearScreen();
 			break;
 		}
 	}
-
-	system("PAUSE");
 	return EXIT_SUCCESS;
 }
